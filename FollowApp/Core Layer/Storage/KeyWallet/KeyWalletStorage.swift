@@ -31,7 +31,6 @@ class KeyWalletStorage: IKeyWalletStorage {
     
     public func getWallet() -> KeyWalletModel? {
         let requestWallet: NSFetchRequest<KeyWallet> = KeyWallet.fetchRequest()
-        requestWallet.predicate = NSPredicate(format: "isSelected = %@", NSNumber(value: true))
         do {
             let results = try mainContext.fetch(requestWallet)
             guard let result = results.first else {

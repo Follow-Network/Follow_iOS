@@ -10,5 +10,8 @@ import Foundation
 
 enum NetworkErrors: Error {
     case couldnotParseJSON
-    case problemsWithInsertingNewEntity
+    case cantSentTransaction
+    case wrongURL
+    case noData
 }
+

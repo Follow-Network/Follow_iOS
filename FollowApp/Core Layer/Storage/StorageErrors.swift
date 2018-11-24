@@ -11,4 +11,6 @@ import Foundation
 enum StorageErrors: Error {
     case noSuchWalletInStorage
     case problemsWithInsertingNewEntity
+    case couldNotImportTheWallet
+    case couldNotCreateTheWallet
 }

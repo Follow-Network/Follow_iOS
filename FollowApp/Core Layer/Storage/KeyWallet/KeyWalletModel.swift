@@ -28,6 +28,5 @@ extension KeyWalletModel: Equatable {
 }
 
 struct HDKey {
-    let name: String?
     let address: String
 }

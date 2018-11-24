@@ -27,6 +27,13 @@
 		E25F356321A98CB800D86668 /* TokensStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F356221A98CB800D86668 /* TokensStorage.swift */; };
 		E25F356521A9962A00D86668 /* StorageErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F356421A9962A00D86668 /* StorageErrors.swift */; };
 		E25F356721A9967C00D86668 /* NetworkErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F356621A9967C00D86668 /* NetworkErrors.swift */; };
+		E25F356A21A99D1100D86668 /* BiometricsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F356921A99D1100D86668 /* BiometricsService.swift */; };
+		E25F356C21A99D3500D86668 /* Web3Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F356B21A99D3500D86668 /* Web3Service.swift */; };
+		E25F356E21A99D8100D86668 /* KeyWalletService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F356D21A99D8100D86668 /* KeyWalletService.swift */; };
+		E25F357021A99DC800D86668 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F356F21A99DC800D86668 /* KeychainService.swift */; };
+		E25F357221A99DE600D86668 /* TokensService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F357121A99DE600D86668 /* TokensService.swift */; };
+		E25F357421A9A09600D86668 /* ConversionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F357321A9A09600D86668 /* ConversionService.swift */; };
+		E25F357721A9A0D900D86668 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25F357621A9A0D900D86668 /* URLs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +59,13 @@
 		E25F356221A98CB800D86668 /* TokensStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokensStorage.swift; sourceTree = "<group>"; };
 		E25F356421A9962A00D86668 /* StorageErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageErrors.swift; sourceTree = "<group>"; };
 		E25F356621A9967C00D86668 /* NetworkErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrors.swift; sourceTree = "<group>"; };
+		E25F356921A99D1100D86668 /* BiometricsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricsService.swift; sourceTree = "<group>"; };
+		E25F356B21A99D3500D86668 /* Web3Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3Service.swift; sourceTree = "<group>"; };
+		E25F356D21A99D8100D86668 /* KeyWalletService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyWalletService.swift; sourceTree = "<group>"; };
+		E25F356F21A99DC800D86668 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		E25F357121A99DE600D86668 /* TokensService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokensService.swift; sourceTree = "<group>"; };
+		E25F357321A9A09600D86668 /* ConversionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionService.swift; sourceTree = "<group>"; };
+		E25F357621A9A0D900D86668 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
 		E4011C7B80F13ECE44349196 /* Pods_FollowApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FollowApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5A0A56A1D984FBA69A13ED4 /* Pods-FollowApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FollowApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-FollowApp/Pods-FollowApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -89,6 +103,8 @@
 		661D47D921A8796A0006D51A /* FollowApp */ = {
 			isa = PBXGroup;
 			children = (
+				E25F357521A9A0CE00D86668 /* Helpers */,
+				E25F356821A99CF900D86668 /* Service Layer */,
 				661D47EC21A87A3B0006D51A /* Presentation Layer */,
 				661D47EE21A87A4F0006D51A /* Core Layer */,
 				661D47DA21A8796A0006D51A /* AppDelegate.swift */,
@@ -234,6 +250,27 @@
 			path = CurrentUser;
 			sourceTree = "<group>";
 		};
+		E25F356821A99CF900D86668 /* Service Layer */ = {
+			isa = PBXGroup;
+			children = (
+				E25F356921A99D1100D86668 /* BiometricsService.swift */,
+				E25F356B21A99D3500D86668 /* Web3Service.swift */,
+				E25F356F21A99DC800D86668 /* KeychainService.swift */,
+				E25F357121A99DE600D86668 /* TokensService.swift */,
+				E25F356D21A99D8100D86668 /* KeyWalletService.swift */,
+				E25F357321A9A09600D86668 /* ConversionService.swift */,
+			);
+			path = "Service Layer";
+			sourceTree = "<group>";
+		};
+		E25F357521A9A0CE00D86668 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				E25F357621A9A0D900D86668 /* URLs.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		ED4A3E70954A77FA9C4774BF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -319,6 +356,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FollowApp/Pods-FollowApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/EthereumABI/EthereumABI.framework",
@@ -334,6 +372,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EthereumABI.framework",
@@ -383,15 +422,22 @@
 				661D480921A87F920006D51A /* Result.swift in Sources */,
 				661D480B21A882F20006D51A /* MainTabAssembly.swift in Sources */,
 				E25F355721A9785300D86668 /* CoreDataModel.xcdatamodeld in Sources */,
+				E25F356C21A99D3500D86668 /* Web3Service.swift in Sources */,
 				661D480121A87E8C0006D51A /* RequestFactory.swift in Sources */,
 				E25F355921A97BBD00D86668 /* KeyWalletStorage.swift in Sources */,
+				E25F357421A9A09600D86668 /* ConversionService.swift in Sources */,
 				E25F356721A9967C00D86668 /* NetworkErrors.swift in Sources */,
+				E25F356E21A99D8100D86668 /* KeyWalletService.swift in Sources */,
 				661D480421A87F0E0006D51A /* IRequest.swift in Sources */,
+				E25F356A21A99D1100D86668 /* BiometricsService.swift in Sources */,
+				E25F357221A99DE600D86668 /* TokensService.swift in Sources */,
+				E25F357021A99DC800D86668 /* KeychainService.swift in Sources */,
 				E25F356321A98CB800D86668 /* TokensStorage.swift in Sources */,
 				661D47F921A87C160006D51A /* RequestConfig.swift in Sources */,
 				661D47F621A87B5F0006D51A /* RequestSender.swift in Sources */,
 				E25F355F21A97E7B00D86668 /* ERC20TokenModel.swift in Sources */,
 				661D47F421A87B550006D51A /* IRequestSender.swift in Sources */,
+				E25F357721A9A0D900D86668 /* URLs.swift in Sources */,
 				E25F355B21A97C0400D86668 /* KeyWalletModel.swift in Sources */,
 				661D480721A87F3F0006D51A /* IParser.swift in Sources */,
 				E25F355121A976C500D86668 /* CurrentUserModel.swift in Sources */,
