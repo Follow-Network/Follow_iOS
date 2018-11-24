@@ -73,7 +73,6 @@
 		661D47D921A8796A0006D51A /* FollowApp */ = {
 			isa = PBXGroup;
 			children = (
-				E25F354C21A969B900D86668 /* Service Layer */,
 				661D47EC21A87A3B0006D51A /* Presentation Layer */,
 				661D47EE21A87A4F0006D51A /* Core Layer */,
 				661D47DA21A8796A0006D51A /* AppDelegate.swift */,
@@ -87,7 +86,6 @@
 		661D47EC21A87A3B0006D51A /* Presentation Layer */ = {
 			isa = PBXGroup;
 			children = (
-				E25F354721A9697B00D86668 /* Authentication */,
 				661D47FB21A87CF50006D51A /* MainTab */,
 			);
 			path = "Presentation Layer";
@@ -96,7 +94,6 @@
 		661D47EE21A87A4F0006D51A /* Core Layer */ = {
 			isa = PBXGroup;
 			children = (
-				E25F354B21A969AF00D86668 /* Storage */,
 				661D47F021A87AB40006D51A /* Network */,
 			);
 			path = "Core Layer";
@@ -135,9 +132,6 @@
 		661D47FB21A87CF50006D51A /* MainTab */ = {
 			isa = PBXGroup;
 			children = (
-				E25F354A21A969A400D86668 /* Profile */,
-				E25F354921A9699E00D86668 /* Chat */,
-				E25F354821A9699700D86668 /* TradersList */,
 				661D47FC21A87DE60006D51A /* Assembly */,
 			);
 			path = MainTab;
@@ -174,48 +168,6 @@
 				E5A0A56A1D984FBA69A13ED4 /* Pods-FollowApp.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		E25F354721A9697B00D86668 /* Authentication */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Authentication;
-			sourceTree = "<group>";
-		};
-		E25F354821A9699700D86668 /* TradersList */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = TradersList;
-			sourceTree = "<group>";
-		};
-		E25F354921A9699E00D86668 /* Chat */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Chat;
-			sourceTree = "<group>";
-		};
-		E25F354A21A969A400D86668 /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Profile;
-			sourceTree = "<group>";
-		};
-		E25F354B21A969AF00D86668 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Storage;
-			sourceTree = "<group>";
-		};
-		E25F354C21A969B900D86668 /* Service Layer */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Service Layer";
 			sourceTree = "<group>";
 		};
 		ED4A3E70954A77FA9C4774BF /* Frameworks */ = {
