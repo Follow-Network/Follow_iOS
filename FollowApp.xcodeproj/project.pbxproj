@@ -73,8 +73,8 @@
 		661D47D921A8796A0006D51A /* FollowApp */ = {
 			isa = PBXGroup;
 			children = (
+				E25F354C21A969B900D86668 /* Service Layer */,
 				661D47EC21A87A3B0006D51A /* Presentation Layer */,
-				661D47ED21A87A470006D51A /* Service Layer */,
 				661D47EE21A87A4F0006D51A /* Core Layer */,
 				661D47DA21A8796A0006D51A /* AppDelegate.swift */,
 				661D47E121A879700006D51A /* Assets.xcassets */,
@@ -87,23 +87,16 @@
 		661D47EC21A87A3B0006D51A /* Presentation Layer */ = {
 			isa = PBXGroup;
 			children = (
+				E25F354721A9697B00D86668 /* Authentication */,
 				661D47FB21A87CF50006D51A /* MainTab */,
-				661D47FA21A87CE70006D51A /* Authentication */,
 			);
 			path = "Presentation Layer";
-			sourceTree = "<group>";
-		};
-		661D47ED21A87A470006D51A /* Service Layer */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Service Layer";
 			sourceTree = "<group>";
 		};
 		661D47EE21A87A4F0006D51A /* Core Layer */ = {
 			isa = PBXGroup;
 			children = (
-				661D47F121A87ABB0006D51A /* Storage */,
+				E25F354B21A969AF00D86668 /* Storage */,
 				661D47F021A87AB40006D51A /* Network */,
 			);
 			path = "Core Layer";
@@ -118,13 +111,6 @@
 				661D480821A87F920006D51A /* Result.swift */,
 			);
 			path = Network;
-			sourceTree = "<group>";
-		};
-		661D47F121A87ABB0006D51A /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Storage;
 			sourceTree = "<group>";
 		};
 		661D47F221A87B1A0006D51A /* RequestSender */ = {
@@ -146,20 +132,13 @@
 			path = RequestConfig;
 			sourceTree = "<group>";
 		};
-		661D47FA21A87CE70006D51A /* Authentication */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Authentication;
-			sourceTree = "<group>";
-		};
 		661D47FB21A87CF50006D51A /* MainTab */ = {
 			isa = PBXGroup;
 			children = (
+				E25F354A21A969A400D86668 /* Profile */,
+				E25F354921A9699E00D86668 /* Chat */,
+				E25F354821A9699700D86668 /* TradersList */,
 				661D47FC21A87DE60006D51A /* Assembly */,
-				661D47FF21A87E3C0006D51A /* TradersList */,
-				661D47FD21A87DF60006D51A /* Chat */,
-				661D47FE21A87E340006D51A /* Profile */,
 			);
 			path = MainTab;
 			sourceTree = "<group>";
@@ -170,27 +149,6 @@
 				661D480A21A882F20006D51A /* MainTabAssembly.swift */,
 			);
 			path = Assembly;
-			sourceTree = "<group>";
-		};
-		661D47FD21A87DF60006D51A /* Chat */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Chat;
-			sourceTree = "<group>";
-		};
-		661D47FE21A87E340006D51A /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Profile;
-			sourceTree = "<group>";
-		};
-		661D47FF21A87E3C0006D51A /* TradersList */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = TradersList;
 			sourceTree = "<group>";
 		};
 		661D480221A87EF80006D51A /* Request */ = {
@@ -216,6 +174,48 @@
 				E5A0A56A1D984FBA69A13ED4 /* Pods-FollowApp.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		E25F354721A9697B00D86668 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		E25F354821A9699700D86668 /* TradersList */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TradersList;
+			sourceTree = "<group>";
+		};
+		E25F354921A9699E00D86668 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		E25F354A21A969A400D86668 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		E25F354B21A969AF00D86668 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		E25F354C21A969B900D86668 /* Service Layer */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Service Layer";
 			sourceTree = "<group>";
 		};
 		ED4A3E70954A77FA9C4774BF /* Frameworks */ = {
