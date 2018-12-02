@@ -1,16 +1,31 @@
 //
 //  StorageErrors.swift
-//  FollowApp
+//  DiveLane
 //
-//  Created by Anton Grigorev on 24.11.2018.
-//  Copyright © 2018 Follow. All rights reserved.
+//  Created by Anton Grigorev on 27/11/2018.
+//  Copyright © 2018 Matter Inc. All rights reserved.
 //
 
 import Foundation
 
-enum StorageErrors: Error {
-    case noSuchWalletInStorage
-    case problemsWithInsertingNewEntity
-    case couldNotImportTheWallet
-    case couldNotCreateTheWallet
+extension Errors {
+    public enum StorageErrors: Error {
+        case noSuchWalletInStorage
+        case cantImportWallet
+        case cantDeleteWallet
+        case cantCreateWallet
+        case noSelectedWallet
+        case cantSelectWallet
+        case unknownError
+        case cantCreateContact
+        case cantGetContact
+        case noSuchContactInStorage
+        case cantDeleteContact
+        case cantCreateToken
+        case noSuchTokenInStorage
+        case cantDeleteToken
+        case cantGetToke
+        case cantCreateTransaction
+        case cantGetTransaction
+    }
 }

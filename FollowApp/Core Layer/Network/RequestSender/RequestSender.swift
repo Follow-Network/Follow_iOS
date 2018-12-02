@@ -20,7 +20,7 @@ final class RequestSender: IRequestSender {
     func send<Parser>(config: RequestConfig<Parser>, completionHandler: @escaping (Result<Parser.Model>) -> Void) {
         
         guard let urlRequest = config.request.urlRequest else {
-            completionHandler(Result.error(NetworkErrors.wrongURL))
+            completionHandler(Result.error(Errors.NetworkErrors.wrongURL))
             return
         }
         
@@ -35,14 +35,14 @@ final class RequestSender: IRequestSender {
             
             guard let data = data else {
                 DispatchQueue.main.async {
-                    completionHandler(Result.error(NetworkErrors.noData))
+                    completionHandler(Result.error(Errors.NetworkErrors.noData))
                 }
                 return
             }
             
             guard let parsedModel: Parser.Model = config.parser.parse(data: data) else {
                 DispatchQueue.main.async {
-                    completionHandler(Result.error(NetworkErrors.couldnotParseJSON))
+                    completionHandler(Result.error(Errors.NetworkErrors.wrongJSON))
                 }
                 return
             }

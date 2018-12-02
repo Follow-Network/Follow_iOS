@@ -8,5 +8,5 @@ target 'FollowApp' do
   # Pods for FollowApp
   # pod 'Pages'
   pod 'web3swift'
-  pod 'Alamofire'
+  pod 'PromiseKit'
 end

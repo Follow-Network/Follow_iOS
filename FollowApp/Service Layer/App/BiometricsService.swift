@@ -1,9 +1,9 @@
 //
 //  BiometricsService.swift
-//  FollowApp
+//  DiveLane
 //
-//  Created by Anton Grigorev on 24.11.2018.
-//  Copyright © 2018 Follow. All rights reserved.
+//  Created by Anton Grigorev on 13/09/2018.
+//  Copyright © 2018 Matter Inc. All rights reserved.
 //
 
 import Foundation
@@ -14,7 +14,7 @@ typealias FailureCallback = ((LocAError) -> Void)
 
 public enum LocAError {
     case userCancelled, failed, systemCancelled, biometryNotAvailable, biometryLockedOut, other
-    
+
     static func initError(_ error: LAError) -> LocAError {
         switch Int32(error.errorCode) {
         case kLAErrorAuthenticationFailed:
@@ -30,7 +30,7 @@ public enum LocAError {
         default: return other
         }
     }
-    
+
     func getErrorMessage() -> String {
         switch self {
         case .biometryNotAvailable: return biometricsNotAvailableReason
@@ -50,59 +50,59 @@ let defaultBiometricsAuthenticationStringReason = "Biometrics do not recognize y
 let biometricsNotAvailableReason = "Authentication not available on your devaice "
 
 public class BiometricsManager: NSObject {
-    
+
     public static let shared = BiometricsManager()
-    
+
     class func canAuth() -> Bool {
         var isAvailableAuthentication = false
         var error: NSError?
-        
+
         isAvailableAuthentication = LAContext().canEvaluatePolicy(LAPolicy.deviceOwnerAuthenticationWithBiometrics, error: &error)
         return error == nil ? isAvailableAuthentication : false
     }
-    
+
     /// Check for authentication
     class func authenticateBioMetrics(reason: String, cancelString: String? = nil, fallbackString: String? = "", success: @escaping SuccessCallback, failure: @escaping FailureCallback) {
-        
+
         let stringReason: String = reason.isEmpty ? BiometricsManager.shared.defaultReason() : reason
-        
+
         let context = LAContext()
-        
+
         context.localizedFallbackTitle = fallbackString
-        
+
         if #available(iOS 10.0, *) {
             context.localizedCancelTitle = cancelString
         }
-        
+
         BiometricsManager.shared.evaluate(context: context, reason: stringReason, policy: LAPolicy.deviceOwnerAuthenticationWithBiometrics, sucess: success, failure: failure)
     }
-    
+
     class func authenticatePasscode(reason: String, cancelTitle: String? = "", success: @escaping SuccessCallback, failure: @escaping FailureCallback) {
         let stringReason = reason.isEmpty ? BiometricsManager.shared.defaultPincodeReason() : reason
-        
+
         let context = LAContext()
-        
+
         if #available(iOS 10.0, *) {
             context.localizedCancelTitle = cancelTitle
         }
-        
+
         if #available(iOS 9.0, *) {
             BiometricsManager.shared.evaluate(context: context, reason: stringReason, policy: LAPolicy.deviceOwnerAuthentication, sucess: success, failure: failure)
         } else {
             BiometricsManager.shared.evaluate(context: context, reason: stringReason, policy: LAPolicy.deviceOwnerAuthenticationWithBiometrics, sucess: success, failure: failure)
         }
-        
+
     }
-    
+
     /// Get authentication reason
     private func defaultReason() -> String {
         return biometricsAuthenticationStringReason
     }
-    
+
     private func defaultPincodeReason() -> String {
         return biometricsPincodeAuthenticationStringReason
     }
-    
+
     ///Evaluate with policy
     private func evaluate(context: LAContext,
                           reason: String,
@@ -125,5 +125,5 @@ public class BiometricsManager: NSObject {
             }
         }
     }
-    
+
 }

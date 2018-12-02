@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (4.7.3)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (0.13.0)
@@ -35,12 +34,11 @@ PODS:
     - SwiftRLP (~> 1.1)
 
 DEPENDENCIES:
-  - Alamofire
+  - PromiseKit
   - web3swift
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Alamofire
     - BigInt
     - CryptoSwift
     - EthereumABI
@@ -53,7 +51,6 @@ SPEC REPOS:
     - web3swift
 
 SPEC CHECKSUMS:
-  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: 16e78bebf567bad1c87b2d58f6547f25b74c31aa
   EthereumABI: f040f5429e5a4366d028c88b88d9441e137593af
@@ -65,6 +62,6 @@ SPEC CHECKSUMS:
   SwiftRLP: 98a02b2210128353ca02e4c2f4d83e2a9796db4f
   web3swift: aeb3d08ded961e0562919d4161f5af6ccb0ab30f
 
-PODFILE CHECKSUM: 00d430338f115d0d18455a7e679e05bdf22cea58
+PODFILE CHECKSUM: 25d873d200f9d855d1896f57ab88f545d4d32a21
 
-COCOAPODS: 1.6.0.beta.2
+COCOAPODS: 1.5.3

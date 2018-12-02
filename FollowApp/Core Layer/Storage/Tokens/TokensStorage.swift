@@ -1,53 +1,44 @@
 //
 //  TokensStorage.swift
-//  FollowApp
+//  DiveLane
 //
-//  Created by Anton Grigorev on 24.11.2018.
-//  Copyright © 2018 Follow. All rights reserved.
+//  Created by Anton Grigorev on 27/11/2018.
+//  Copyright © 2018 Matter Inc. All rights reserved.
 //
 
 import Foundation
 import CoreData
 
 protocol ITokensStorage {
-    func getAllTokens(for wallet: KeyWalletModel, forNetwork: Int64) -> [ERC20TokenModel]
-    func saveCustomToken(with token: ERC20TokenModel?, forWallet: KeyWalletModel, forNetwork: Int64, completion: @escaping(Error?) -> Void)
-    func getToken(token: ERC20TokenModel?) -> ERC20TokenModel?
-    func getTokensList(for searchingString: String) -> [ERC20TokenModel]?
-    func deleteToken(token: ERC20TokenModel, forWallet: KeyWalletModel, forNetwork: Int64, completion: @escaping (Error?) -> Void)
+    func getAllTokens(for wallet: WalletModel, networkId: Int64) throws -> [ERC20TokenModel]
+    func saveCustomToken(from dict: [String: Any]) throws
+    func saveCustomToken(token: ERC20TokenModel, wallet: WalletModel, networkId: Int64) throws
+    func getToken(token: ERC20TokenModel) throws -> ERC20TokenModel
+    func getTokensList(for searchingString: String) throws -> [ERC20TokenModel]
+    func deleteToken(token: ERC20TokenModel, wallet: WalletModel, networkId: Int64) throws
 }
 
-
-class TokensStorage: ITokensStorage {
+public class TokensStorage: ITokensStorage {
     
-    lazy var container: NSPersistentContainer = NSPersistentContainer(name: "CoreDataModel")
-    private lazy var mainContext = self.container.viewContext
-    
-    init() {
-        container.loadPersistentStores { (_, error) in
-            if let error = error {
-                fatalError("Failed to load store: \(error)")
-            }
-        }
-    }
-    
-    public func saveToken(from dict: [String: Any], completion: @escaping(Error?) -> Void) {
-        
-        container.performBackgroundTask { (context) in
-            
+    public func saveCustomToken(from dict: [String: Any]) throws {
+        let group = DispatchGroup()
+        group.enter()
+        var error: Error?
+        ContainerCD.container.performBackgroundTask { (context) in
             do {
                 let token: NSFetchRequest<ERC20Token> = ERC20Token.fetchRequest()
                 guard let address = dict["address"] as? String else {
-                    completion(nil)
+                    error = Errors.StorageErrors.cantCreateToken
+                    group.leave()
                     return
                 }
                 token.predicate = NSPredicate(format: "address = %@", address)
-                
                 guard var newToken = NSEntityDescription.insertNewObject(forEntityName: "ERC20Token", into: context) as? ERC20Token else {
+                    error = Errors.StorageErrors.cantCreateToken
+                    group.leave()
                     return
                 }
-                
-                if let entity = try self.mainContext.fetch(token).first {
+                if let entity = try ContainerCD.mainContext!.fetch(token).first {
                     newToken = entity
                 }
                 
@@ -57,136 +48,141 @@ class TokensStorage: ITokensStorage {
                 newToken.decimals = String((dict["decimal"] as? Int) ?? 0)
                 newToken.networkID = 0
                 newToken.isAdded = false
+                newToken.walletAddress = ""
                 
                 try context.save()
-                completion(nil)
-            } catch {
-                completion(error)
+                group.leave()
+            } catch let someErr {
+                error = someErr
+                group.leave()
             }
+        }
+        group.wait()
+        if let resErr = error {
+            throw resErr
         }
     }
     
-    public func saveCustomToken(with token: ERC20TokenModel?,
-                                forWallet: KeyWalletModel,
-                                forNetwork: Int64,
-                                completion: @escaping(Error?) -> Void) {
-        
-        container.performBackgroundTask { (context) in
+    public func saveCustomToken(token: ERC20TokenModel,
+                                wallet: WalletModel,
+                                networkId: Int64) throws {
+        let group = DispatchGroup()
+        group.enter()
+        var error: Error?
+        ContainerCD.container.performBackgroundTask { (context) in
+            guard let entity = NSEntityDescription.insertNewObject(forEntityName: "ERC20Token",
+                                                                   into: context) as? ERC20Token else {
+                error = Errors.StorageErrors.cantCreateToken
+                group.leave()
+                return
+            }
+            entity.address = token.address
+            entity.name = token.name
+            entity.symbol = token.symbol
+            entity.decimals = token.decimals
+            entity.isAdded = true
+            entity.walletAddress = wallet.address
+            entity.networkID = networkId
             do {
-                guard let token = token else {
-                    completion(NetworkErrors.couldnotParseJSON)
-                    return
-                }
-                guard let entity = NSEntityDescription.insertNewObject(forEntityName: "ERC20Token",
-                                                                       into: context) as? ERC20Token else {
-                                                                        completion(NetworkErrors.couldnotParseJSON)
-                                                                        return
-                }
-                entity.address = token.address
-                entity.name = token.name
-                entity.symbol = token.symbol
-                entity.decimals = token.decimals
-                entity.isAdded = true
-                let networkID = forNetwork
-                entity.networkID = networkID
-                
                 try context.save()
-                completion(nil)
-            } catch {
-                completion(error)
+                group.leave()
+            } catch let someErr {
+                error = someErr
+                group.leave()
             }
+        }
+        group.wait()
+        if let resErr = error {
+            throw resErr
         }
     }
     
-    public func getAllTokens(for wallet: KeyWalletModel, forNetwork: Int64) -> [ERC20TokenModel] {
+    public func getAllTokens(for wallet: WalletModel, networkId: Int64) throws -> [ERC20TokenModel] {
         do {
             let requestTokens: NSFetchRequest<ERC20Token> = ERC20Token.fetchRequest()
-            let networkID = forNetwork
-            //let networkID: Int64 = Int64(String(CurrentNetwork.currentNetwork?.chainID ?? 0)) ?? 0
-            
             requestTokens.predicate = NSPredicate(format:
                 "networkID == %@ && isAdded == %@",
-                                                  NSNumber(value: networkID),
+                                                  NSNumber(value: networkId),
                                                   NSNumber(value: true)
             )
-            let results = try mainContext.fetch(requestTokens)
-            return results.map {
+            let results = try ContainerCD.mainContext!.fetch(requestTokens)
+            let tokens = results.filter {
+                $0.walletAddress == wallet.address
+            }
+            return tokens.map {
                 return ERC20TokenModel.fromCoreData(crModel: $0)
             }
-            
-        } catch {
-            print(error)
-            return []
+        } catch let error {
+            throw error
         }
     }
     
-    public func getAllTokens() -> [ERC20TokenModel]? {
+    public func getToken(token: ERC20TokenModel) throws -> ERC20TokenModel {
         let requestToken: NSFetchRequest<ERC20Token> = ERC20Token.fetchRequest()
-        requestToken.predicate = NSPredicate(format: "walletAddress = %@", "")
+        requestToken.predicate = NSPredicate(format: "address = %@", token.address)
         do {
-            let results = try mainContext.fetch(requestToken)
-            return results.map {
+            let results = try ContainerCD.mainContext!.fetch(requestToken)
+            let mappedRes = results.map {
                 return ERC20TokenModel.fromCoreData(crModel: $0)
+            }.first
+            guard let token = mappedRes else {
+                throw Errors.StorageErrors.cantGetContact
             }
-        } catch {
-            return nil
+            return token
+        } catch let error {
+            throw error
         }
     }
     
-    public func getToken(token: ERC20TokenModel?) -> ERC20TokenModel? {
-        let requestToken: NSFetchRequest<ERC20Token> = ERC20Token.fetchRequest()
-        requestToken.predicate = NSPredicate(format: "address = %@", (token?.address) ?? "")
-        do {
-            let results = try mainContext.fetch(requestToken)
-            return results.map {
-                return ERC20TokenModel.fromCoreData(crModel: $0)
-                }.first
-        } catch {
-            return nil
-        }
-        
-    }
-    
-    public func getTokensList(for searchingString: String) -> [ERC20TokenModel]? {
+    public func getTokensList(for searchingString: String) throws -> [ERC20TokenModel] {
         let requestToken: NSFetchRequest<ERC20Token> = ERC20Token.fetchRequest()
         requestToken.predicate = NSPredicate(format:
             "walletAddress = %@ && (address CONTAINS[c] %@ || name CONTAINS[c] %@ || symbol CONTAINS[c] %@)",
                                              "",
-                                             searchingString, searchingString, searchingString)
+                                             searchingString,
+                                             searchingString,
+                                             searchingString)
         do {
-            let results = try mainContext.fetch(requestToken)
+            let results = try ContainerCD.mainContext!.fetch(requestToken)
             return results.map {
                 return ERC20TokenModel.fromCoreData(crModel: $0)
             }
-        } catch {
-            return nil
+        } catch let error {
+            throw error
         }
     }
     
     public func deleteToken(token: ERC20TokenModel,
-                            forWallet: KeyWalletModel,
-                            forNetwork: Int64,
-                            completion: @escaping (Error?) -> Void) {
+                             wallet: WalletModel,
+                             networkId: Int64) throws {
+        let group = DispatchGroup()
+        group.enter()
+        var error: Error?
+        let requestToken: NSFetchRequest<ERC20Token> = ERC20Token.fetchRequest()
+        requestToken.predicate = NSPredicate(format: "walletAddress = %@", wallet.address)
         do {
-            let requestToken: NSFetchRequest<ERC20Token> = ERC20Token.fetchRequest()
-            requestToken.predicate = NSPredicate(format: "walletAddress = %@", forWallet.address)
-            
-            let results = try mainContext.fetch(requestToken)
+            let results = try ContainerCD.mainContext!.fetch(requestToken)
             let tokens = results.filter {
                 $0.address == token.address
             }
             let tokensInNetwork = tokens.filter {
-                $0.networkID == forNetwork
+                $0.networkID == networkId
             }
             guard let token = tokensInNetwork.first else {
-                completion(nil)
+                error = Errors.StorageErrors.noSuchTokenInStorage
+                group.leave()
                 return
             }
-            mainContext.delete(token)
-            try mainContext.save()
-            completion(nil)
-        } catch {
-            completion(error)
+            ContainerCD.mainContext!.delete(token)
+            try ContainerCD.mainContext!.save()
+            group.leave()
+        } catch let someErr {
+            error = someErr
+            group.leave()
+        }
+        group.wait()
+        if let resErr = error {
+            throw resErr
         }
     }
     
@@ -195,5 +191,4 @@ class TokensStorage: ITokensStorage {
         fr.predicate = NSPredicate(format: "address = %@", address)
         return fr
     }
-    
 }
