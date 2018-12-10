@@ -11,9 +11,9 @@ import Web3swift
 import BigInt
 
 public class CurrentWeb {
-
+    
     static var _currentWeb: web3?
-
+    
     class var currentWeb: web3 {
         get {
             if let web = _currentWeb {
@@ -23,19 +23,19 @@ public class CurrentWeb {
                 return Web3.InfuraMainnetWeb3()
             }
         }
-
+        
         set(web) {
             _currentWeb = web
         }
     }
-
+    
 }
 
 public class CurrentNetwork {
-
+    
     static var _currentNetwork: Networks?
-
-    class var currentNetwork: Networks? {
+    
+    class var currentNetwork: Networks {
         get {
             if let net = _currentNetwork {
                 return net
@@ -44,14 +44,14 @@ public class CurrentNetwork {
                 return Networks.Mainnet
             }
         }
-
+        
         set(network) {
             _currentNetwork = network
         }
     }
-
+    
     public func getNetworkID() -> Int64 {
-        let chainID = Int64(CurrentNetwork.currentNetwork?.chainID ?? 0)
+        let chainID = Int64(CurrentNetwork.currentNetwork.chainID)
         return chainID
     }
 }

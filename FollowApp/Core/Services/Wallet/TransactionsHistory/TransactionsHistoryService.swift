@@ -77,8 +77,8 @@ public class TransactionsHistoryService: ITransactionsHistoryService {
     }
     
     private func loadTransactionsPromise(for address: String,
-                                        txType: TransactionType,
-                                        networkId: Int64) -> Promise<[ETHTransactionModel]> {
+                                         txType: TransactionType,
+                                         networkId: Int64) -> Promise<[ETHTransactionModel]> {
         let returnPromise = Promise<[ETHTransactionModel]> { (seal) in
             guard let url = URLs().getEtherscanURL(for: txType, address: address, networkId: networkId) else {
                 seal.reject(Errors.NetworkErrors.wrongURL)

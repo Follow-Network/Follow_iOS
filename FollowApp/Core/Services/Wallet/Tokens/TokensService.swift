@@ -20,7 +20,7 @@ protocol ITokensService {
 }
 
 public class TokensService {
-
+    
     let web3service = Web3Service()
     let ratesService = RatesService.service
     
@@ -52,7 +52,7 @@ public class TokensService {
         }
         return returnPromise
     }
-
+    
     private func name(for tokenAddress: String) throws -> String {
         do {
             let contract = try web3service.contract(for: tokenAddress)
@@ -69,7 +69,7 @@ public class TokensService {
             throw error
         }
     }
-
+    
     private func symbol(for tokenAddress: String) throws -> String {
         do {
             let contract = try web3service.contract(for: tokenAddress)
@@ -86,7 +86,7 @@ public class TokensService {
             throw error
         }
     }
-
+    
     private func decimals(for tokenAddress: String) throws -> BigUInt {
         do {
             let contract = try web3service.contract(for: tokenAddress)
@@ -103,13 +103,13 @@ public class TokensService {
             throw error
         }
     }
-
+    
     private func getTokenFromNet(with address: String) throws -> ERC20TokenModel {
-
+        
         guard EthereumAddress(address) != nil else {
             throw Web3Error.inputError(desc: "Wrong address")
         }
-
+        
         let name = try self.name(for: address)
         let decimals = try self.decimals(for: address)
         let symbol = try self.symbol(for: address)
@@ -161,7 +161,7 @@ public class TokensService {
             throw resErr
         }
     }
-
+    
     public func updateConversion(for token: ERC20TokenModel) throws -> Double {
         return try self.ratesService.updateConversionRate(for: token.symbol.uppercased())
     }
