@@ -9,9 +9,21 @@ target 'Follow' do
   pod 'RxSwift'
   pod 'RxCocoa'
   pod 'RxDataSources'
-  pod 'SDWebImage'
+  pod 'Action'
   pod 'Fabric'
   pod 'Crashlytics'
+  
+  # Network
+  pod 'TinyNetworking/RxSwift'
+  
+  # Image
+  pod 'RxNuke'
+  
+  # Transition
+  pod 'Hero'
+  
+  # Constraints
+  pod 'VanillaConstraints'
 
   target 'FollowTests' do
     inherit! :search_paths
