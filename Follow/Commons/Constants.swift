@@ -24,13 +24,13 @@ struct Constants {
     }
     
     struct FollowSettings {
-        static let host = "thefollow.inc"
+        static let host = "follow-network.org"
         static let callbackURLScheme = "follow://"
         static let clientID = FollowSecrets.clientID
         static let clientSecret = FollowSecrets.clientSecret
-        static let authorizeURL = "https://thefollow.org/authorize"
-        static let tokenURL = "https://thefollow.org/token"
-        static let redirectURL = "papr://thefollow.org"
+        static let authorizeURL = "https://follow-network.org/authorize"
+        static let tokenURL = "https://follow-network.org/token"
+        static let redirectURL = "follow://follow-network.org"
         
         struct FollowSecrets {
             

@@ -8,22 +8,19 @@
 
 import UIKit
 
-/**
- Refers to a screen managed by a view controller.
- It can be a regular screen, or a modal dialog.
- It comprises a view controller and a view model.
- */
-
 protocol TargetScene {
     var transition: SceneTransitionType { get }
 }
 
 enum Scene {
     case follow
+    case createWallet(CreateWalletViewModel)
+    case editProfile(EditProfileViewModel)
     case login(LoginViewModel)
+    case transaction(TransactionViewModel)
+    case userProfile(UserProfileViewModel)
     case alert(AlertViewModel)
     case activity([Any])
-    case userProfile(UserProfileViewModel)
 }
 
 extension Scene: TargetScene {
@@ -32,53 +29,56 @@ extension Scene: TargetScene {
         case .follow:
             let followTabBarController = FollowTabBarController()
             
-            //HomeViewController
-            var tradersVC = TradersViewController(collectionViewLayout: PinterestLayout(numberOfColumns: 1))
-            let tradersViewModel = TradersViewModel()
-            let rootTradersVC = FollowNavigationController(rootViewController: tradersVC)
-            tradersVC.bind(to: tradersViewModel)
+            //TradersViewController
+            var tradersListVC = TradersListViewController.initFromNib()
+            let tradersListViewModel = TradersListViewModel()
+            let rootTradersListVC = FollowNavigationController(rootViewController: tradersListVC)
+            tradersListVC.bind(to: tradersViewModel)
             
-            //SearchViewController
-//            var searchVC = SearchViewController.initFromNib()
-//            let searchViewModel = SearchViewModel()
-//            let rootSearchVC = PaprNavigationController(rootViewController: searchVC)
-//            searchVC.bind(to: searchViewModel)
+            //UserProfileViewController
+            var userProfileVC = UserProfileViewController.initFromNib()
+            let userProfileViewModel = UserProfileViewModel()
+            let rootUserProfileVC = FollowNavigationController(rootViewController: userProfileVC)
+            userProfileVC.bind(to: userProfileViewModel)
             
-            //CollectionsViewController
-//            var collectionsVC = CollectionsViewController()
-//            let collectionViewModel = CollectionsViewModel()
-//            let rootCollectionVC = PaprNavigationController(rootViewController: collectionsVC)
-//            collectionsVC.bind(to: collectionViewModel)
-            
-            rootTradersVC.tabBarItem = UITabBarItem(
-                title: "Traders",
-                image: UIImage(named: "traders-white"),
+            rootTradersListVC.tabBarItem = UITabBarItem(
+                title: "Traders List",
+                image: UIImage(named: "traders-list-white"),
                 tag: 0
             )
             
-//            rootCollectionVC.tabBarItem = UITabBarItem(
-//                title: "Collections",
-//                image: UIImage(named: "collections-white"),
-//                tag: 1
-//            )
-//
-//            rootSearchVC.tabBarItem = UITabBarItem(
-//                title: "Search",
-//                image: UIImage(named: "search-white"),
-//                tag: 2
-//            )
-//
+            rootUserProfileVC.tabBarItem = UITabBarItem(
+                title: "User Profile",
+                image: UIImage(named: "user-profile-white"),
+                tag: 1
+            )
+
             followTabBarController.viewControllers = [
-                rootTradersVC,
-//                rootCollectionVC,
-//                rootSearchVC
+                rootTradersListVC,
+                rootUserProfileVC
             ]
             
             return .tabBar(followTabBarController)
+        case let .createWallet(viewModel):
+            var vc = CreateWalletViewController.initFromNib()
+            vc.bind(to: viewModel)
+            return .present(vc)
+        case let .editProfile(viewModel):
+            var vc = EditProfileViewController.initFromNib()
+            vc.bind(to: viewModel)
+            return .present(vc)
         case let .login(viewModel):
             var vc = LoginViewController.initFromNib()
             vc.bind(to: viewModel)
             return .present(vc)
+        case let .transaction(viewModel):
+            var vc = TransactionViewController.initFromNib()
+            vc.bind(to: viewModel)
+            return .present(vc)
+        case let .userProfile(viewModel):
+            var vc = UserProfileViewController.initFromNib()
+            vc.bind(to: viewModel)
+            return .push(vc)
         case let .alert(viewModel):
             var vc = AlertViewController(title: nil, message: nil, preferredStyle: .alert)
             vc.bind(to: viewModel)
@@ -86,36 +86,6 @@ extension Scene: TargetScene {
         case let .activity(items):
             let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
             return .alert(vc)
-//        case let .photoDetails(viewModel):
-//            var vc = PhotoDetailsViewController.initFromNib()
-//            vc.bind(to: viewModel)
-//            return .present(vc)
-//        case let .addToCollection(viewModel):
-//            var vc = AddToCollectionViewController.initFromNib()
-//            let rootViewController = UINavigationController(rootViewController: vc)
-//            vc.bind(to: viewModel)
-//            return .present(rootViewController)
-//        case let .createCollection(viewModel):
-//            var vc = CreateCollectionViewController.initFromNib()
-//            let rootViewController = UINavigationController(rootViewController: vc)
-//            vc.bind(to: viewModel)
-//            return .present(rootViewController)
-//        case let .searchPhotos(viewModel):
-//            var vc = SearchPhotosViewController(collectionViewLayout: PinterestLayout(numberOfColumns: 2))
-//            vc.bind(to: viewModel)
-//            return .push(vc)
-//        case let .searchCollections(viewModel):
-//            var vc = SearchCollectionsViewController.initFromNib()
-//            vc.bind(to: viewModel)
-//            return .push(vc)
-//        case let .searchUsers(viewModel):
-//            var vc = SearchUsersViewController()
-//            vc.bind(to: viewModel)
-//            return .push(vc)
-        case let .userProfile(viewModel):
-            var vc = UserProfileViewController.initFromNib()
-            vc.bind(to: viewModel)
-            return .push(vc)
         }
     }
 }
