@@ -9,15 +9,15 @@
 import RxDataSources
 
 struct Post: Codable {
-    let id: String
-    let createdAt: String
-    let updatedAt: String
+    let id: UInt64
+    let createdAt: TimeInterval
+    let updatedAt: TimeInterval
     let description: String
-    var likes: Int
+    var likes: UInt32
     var likedByUser: Bool?
-    let views: Int
+    let views: UInt32
     let user: User
-    let images: [Image]?
+    let images: [Image?]
     let links: Links?
     let deal: Deal?
     

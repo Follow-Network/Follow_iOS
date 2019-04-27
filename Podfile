@@ -6,24 +6,25 @@ target 'Follow' do
   use_frameworks!
 
   # Pods for Follow
-  pod 'RxSwift'
-  pod 'RxCocoa'
-  pod 'RxDataSources'
-  pod 'Action'
-  pod 'Fabric'
-  pod 'Crashlytics'
+  pod 'web3swift', '~> 2.1.6'
+  pod 'RxSwift', '~> 4.5.0'
+  pod 'RxCocoa', '~> 4.5.0'
+  pod 'RxDataSources', '~> 3.1.0'
+  pod 'Action', '~> 3.11.0'
+  pod 'Fabric', '~> 1.9.0'
+  pod 'Crashlytics', '~> 3.12.0'
   
   # Network
-  pod 'TinyNetworking/RxSwift'
+  pod 'TinyNetworking/RxSwift', '~> 2.1.0'
   
   # Image
-  pod 'RxNuke'
+  pod 'RxNuke', '~> 0.8.1'
   
   # Transition
-  pod 'Hero'
+  pod 'Hero', '~> 1.4.0'
   
   # Constraints
-  pod 'VanillaConstraints'
+  pod 'VanillaConstraints', '~> 1.0.1'
 
   target 'FollowTests' do
     inherit! :search_paths

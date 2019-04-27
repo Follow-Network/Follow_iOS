@@ -76,4 +76,29 @@ struct ContentService: ContentServiceType {
                 return .just(.error(.error(withMessage: "Can't unlike post")))
         }
     }
+    
+    func makePost(post: Post) ->  Observable<Result<Post, ServiceError>> {
+        var imagesUrls = [String]()
+        for image in post.images where image?.urls.regular != nil {
+            imagesUrls.append((image?.urls.regular)!)
+        }
+        return service.rx
+            .request(resource: .makePost(createdAt: post.createdAt,
+                                         updatedAt: post.updatedAt,
+                                         description: post.description,
+                                         likes: post.likes,
+                                         views: post.views,
+                                         userId: post.user.id,
+                                         images: imagesUrls,
+                                         dealId: post.deal?.id))
+            .map(to: LikeUnlikePost.self)
+            .map { $0.post }
+            .asObservable()
+            .unwrap()
+            .flatMapIgnore { Observable.just(self.cache.set(value: $0)) } // 🎡 Update cache
+            .map(Result.success)
+            .catchError { _ in
+                return .just(.error(.error(withMessage: "Can't unlike post")))
+        }
+    }
 }

@@ -16,9 +16,10 @@ public struct CacheKey: Equatable, Hashable {
     public static func == (lhs: CacheKey, rhs: CacheKey) -> Bool {
         return lhs.typeName == rhs.typeName && lhs.id == rhs.id
     }
-
-    public var hashValue: Int {
-        return typeName.hashValue ^ id.hashValue
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(typeName)
+        hasher.combine(id)
     }
 }
 

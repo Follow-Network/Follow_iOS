@@ -104,18 +104,29 @@ enum Follow {
         signature: String
     )
     
-    case likeImage(id: String)
+    case likeImage(id: UInt64)
     
-    case unlikeImage(id: String)
+    case unlikeImage(id: UInt64)
     
     case likePost(
         userId: UInt32,
-        postId: String
+        postId: UInt64
     )
     
     case unlikePost(
         userId: UInt32,
-        postId: String
+        postId: UInt64
+    )
+    
+    case makePost(
+        createdAt: TimeInterval,
+        updatedAt: TimeInterval,
+        description: String,
+        likes: UInt32,
+        views: UInt32,
+        userId: UInt32,
+        images: [String?],
+        dealId: UInt64?
     )
 }
 
@@ -182,6 +193,8 @@ extension Follow: ResourceType {
         case let .getPosts(param):
             let page = param.page != nil ? param.page!.description : ""
             return .get(path: "/user/\(param.id)/posts/\(page)")
+        case let .makePost(param):
+            return .post(path: "/user/\(param.userId)/makePost")
         }
     }
 
@@ -343,6 +356,21 @@ extension Follow: ResourceType {
         case let .getPosts(value):
             var params: [String: Any] = [:]
             params["order_by"] = value.orderBy
+            
+            return .requestWithParameters(params, encoding: URLEncoding())
+            
+        case let .makePost(value):
+            
+            var params: [String: Any] = [:]
+            params["id"] = 0
+            params["createdAt"] = value.createdAt
+            params["updatedAt"] = value.updatedAt
+            params["description"] = value.description
+            params["likes"] = value.likes
+            params["views"] = value.views
+            params["user_id"] = value.userId
+            params["images"] = value.images
+            params["deal_id"] = value.dealId
             
             return .requestWithParameters(params, encoding: URLEncoding())
         }

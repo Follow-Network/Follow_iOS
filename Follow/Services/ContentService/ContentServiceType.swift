@@ -14,4 +14,5 @@ protocol ContentServiceType {
     func unlikeImage(image: Image) ->  Observable<Result<Image, ServiceError>>
     func likePost(post: Post) ->  Observable<Result<Post, ServiceError>>
     func unlikePost(post: Post) ->  Observable<Result<Post, ServiceError>>
+    func makePost(post: Post) -> Observable<Result<Post, ServiceError>>
 }

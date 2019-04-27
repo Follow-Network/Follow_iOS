@@ -9,12 +9,12 @@
 import RxDataSources
 
 struct Image: Codable {
-    let id: String
+    let id: UInt64
     let description: String
-    var likes: Int
+    var likes: UInt32
     var likedByUser: Bool?
-    let width: Int
-    let height: Int
+    let width: UInt32
+    let height: UInt32
     let ownerId: UInt32
     let urls: ImageURLs
     
