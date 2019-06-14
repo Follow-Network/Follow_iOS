@@ -1,30 +1,50 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '10.0'
 
 target 'Follow' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
   # Pods for Follow
-  pod 'web3swift', '~> 2.1.6'
-  pod 'RxSwift', '~> 4.5.0'
-  pod 'RxCocoa', '~> 4.5.0'
-  pod 'RxDataSources', '~> 3.1.0'
-  pod 'Action', '~> 3.11.0'
-  pod 'Fabric', '~> 1.9.0'
-  pod 'Crashlytics', '~> 3.12.0'
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'RxDataSources'
+  pod 'RxSwiftExt'
+  
+  # Web3
+  pod 'web3.swift.pod', '~> 2.2.0'
+  
+  # Actions
+  pod 'Action'
+  
+  # Localization
+  #pod 'RxLocalizer'
+  
+  # Statistics
+  pod 'Fabric'
+  pod 'Crashlytics'
+  
+  # Gestures
+  #pod 'RxGesture'
+  
+  # Keyboard
+  #pod 'RxKeyboard'
+  
+  # Database
+  pod 'RealmSwift'
+  #pod 'RxRealm'
   
   # Network
-  pod 'TinyNetworking/RxSwift', '~> 2.1.0'
+  pod 'TinyNetworking/RxSwift'
   
   # Image
-  pod 'RxNuke', '~> 0.8.1'
+  pod 'RxNuke'
   
   # Transition
-  pod 'Hero', '~> 1.4.0'
+  pod 'Hero'
   
   # Constraints
-  pod 'VanillaConstraints', '~> 1.0.1'
+  pod 'VanillaConstraints'
 
   target 'FollowTests' do
     inherit! :search_paths
