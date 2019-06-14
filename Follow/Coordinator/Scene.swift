@@ -14,13 +14,13 @@ protocol TargetScene {
 
 enum Scene {
     case follow
-    case createWallet(CreateWalletViewModel)
-    case editProfile(EditProfileViewModel)
-    case login(LoginViewModel)
-    case transaction(TransactionViewModel)
-    case userProfile(UserProfileViewModel)
-    case alert(AlertViewModel)
-    case activity([Any])
+    case createWallet (CreateWalletViewModel)
+    case editProfile  (EditProfileViewModel)
+    case login        (LoginViewModel)
+    case transaction  (TransactionViewModel)
+    case userProfile  (UserProfileViewModel)
+    case alert        (AlertViewModel)
+    case activity     ([Any])
 }
 
 extension Scene: TargetScene {
@@ -30,15 +30,15 @@ extension Scene: TargetScene {
             let followTabBarController = FollowTabBarController()
             
             //TradersViewController
-            var tradersListVC = TradersListViewController.initFromNib()
-            let tradersListViewModel = TradersListViewModel()
-            let rootTradersListVC = FollowNavigationController(rootViewController: tradersListVC)
+            var tradersListVC          = TradersListViewController.initFromNib()
+            let tradersListViewModel   = TradersListViewModel()
+            let rootTradersListVC      = FollowNavigationController(rootViewController: tradersListVC)
             tradersListVC.bind(to: tradersViewModel)
             
             //UserProfileViewController
-            var userProfileVC = UserProfileViewController.initFromNib()
-            let userProfileViewModel = UserProfileViewModel()
-            let rootUserProfileVC = FollowNavigationController(rootViewController: userProfileVC)
+            var userProfileVC          = UserProfileViewController.initFromNib()
+            let userProfileViewModel   = UserProfileViewModel()
+            let rootUserProfileVC      = FollowNavigationController(rootViewController: userProfileVC)
             userProfileVC.bind(to: userProfileViewModel)
             
             rootTradersListVC.tabBarItem = UITabBarItem(

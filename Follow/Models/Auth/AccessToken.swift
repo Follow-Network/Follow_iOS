@@ -1,5 +1,5 @@
 //
-//  FollowAccessToken.swift
+//  AccessToken.swift
 //  Follow
 //
 //  Created by Anton on 21/04/2019.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct FollowAccessToken: Decodable {
+struct AccessToken: Decodable {
     let accessToken: String
     let tokenType: String
     let refreshToken: String

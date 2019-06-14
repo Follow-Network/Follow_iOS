@@ -15,4 +15,5 @@ protocol AuthServiceType {
                   password: String,
                   signature: String) -> Observable<Result<User, ServiceError>>
     func authenticate(username: String, password: String) -> Observable<Result<User, ServiceError>>
+    func accessToken(with code: String, completion: @escaping (AccessToken?, ServiceError?) -> Void)
 }

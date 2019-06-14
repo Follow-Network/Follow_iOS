@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct FollowAuthError: Decodable {
+struct FollowError: Decodable {
 
     let error: String
     let errorDescription: String

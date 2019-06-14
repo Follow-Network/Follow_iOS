@@ -22,6 +22,10 @@ enum Follow {
         username: String,
         password: String
     )
+    
+    case accessToken(
+        withCode: String
+    )
 
     case setMe(
         id: UInt32,
@@ -144,7 +148,9 @@ extension Follow: ResourceType {
         case .register:
             return .post(path: "/join")
         case .authenticate:
-            return .post(path: "/auth")
+            return .post(path: "/auth/authorize")
+        case .accessToken:
+            return .post(path: "/auth/token")
         case .setMe:
             return .post(path: "/user/set")
         case let .getMe(id):
@@ -221,6 +227,17 @@ extension Follow: ResourceType {
             params["username"] = value.username
             params["password"] = value.password
 
+            return .requestWithParameters(params, encoding: URLEncoding())
+            
+        case let .accessToken(value):
+            
+            var params: [String: Any] = [:]
+            params["grant_type"] = "authorization_code"
+            params["client_id"] = Constants.FollowSettings.clientID
+            params["client_secret"] = Constants.FollowSettings.clientSecret
+            params["redirect_uri"] = Constants.FollowSettings.redirectURL
+            params["code"] = value
+            
             return .requestWithParameters(params, encoding: URLEncoding())
 
         case let .setMe(value):
