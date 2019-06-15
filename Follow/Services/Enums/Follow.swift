@@ -10,23 +10,6 @@ import Foundation
 import TinyNetworking
 
 enum Follow {
-    
-    case register(
-        pubkey: String,
-        username: String,
-        password: String,
-        signature: String
-    )
-    
-    case authenticate(
-        username: String,
-        password: String
-    )
-    
-    case accessToken(
-        withCode: String
-    )
-
     case setMe(
         id: UInt32,
         username: String?,
@@ -137,20 +120,17 @@ enum Follow {
 extension Follow: ResourceType {
 
     var baseURL: URL {
-        guard let url = URL(string: "https://api.follow-network.org") else {
-            fatalError("FAILED: https://api.follow-network.org")
+        let urlString = Constants.FollowSettings.https +
+            Constants.FollowSettings.apiPrefix +
+            Constants.FollowSettings.host
+        guard let url = URL(string: urlString) else {
+            fatalError("FAILED: \(urlString)")
         }
         return url
     }
     
     var endpoint: Endpoint {
         switch self {
-        case .register:
-            return .post(path: "/join")
-        case .authenticate:
-            return .post(path: "/auth/authorize")
-        case .accessToken:
-            return .post(path: "/auth/token")
         case .setMe:
             return .post(path: "/user/set")
         case let .getMe(id):
@@ -211,35 +191,6 @@ extension Follow: ResourceType {
 //        )
 
         switch self {
-        case let .register(value):
-
-            var params: [String: Any] = [:]
-            params["pubkey"] = value.pubkey
-            params["username"] = value.username
-            params["password"] = value.password
-            params["signature"] = value.signature
-
-            return .requestWithParameters(params, encoding: URLEncoding())
-
-        case let .authenticate(value):
-
-            var params: [String: Any] = [:]
-            params["username"] = value.username
-            params["password"] = value.password
-
-            return .requestWithParameters(params, encoding: URLEncoding())
-            
-        case let .accessToken(value):
-            
-            var params: [String: Any] = [:]
-            params["grant_type"] = "authorization_code"
-            params["client_id"] = Constants.FollowSettings.clientID
-            params["client_secret"] = Constants.FollowSettings.clientSecret
-            params["redirect_uri"] = Constants.FollowSettings.redirectURL
-            params["code"] = value
-            
-            return .requestWithParameters(params, encoding: URLEncoding())
-
         case let .setMe(value):
 
             var params: [String: Any] = [:]

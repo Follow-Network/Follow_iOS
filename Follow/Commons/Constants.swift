@@ -24,27 +24,30 @@ struct Constants {
     }
     
     struct FollowSettings {
+        static let https = "https://"
+        static let ws = "ws://"
+        static let apiPrefix = "api."
         static let host = "follow-network.org"
+        static let mainnetInfura = "mainnet.infura.io/v3"
+        static let infuraProjectId = "4406c3acf862426c83991f1752c46dd8"
         static let callbackURLScheme = "follow://"
-        static let clientID = FollowSecrets.clientID
-        static let clientSecret = FollowSecrets.clientSecret
-        static let authorizeURL = "https://follow-network.org/authorize"
-        static let tokenURL = "https://follow-network.org/token"
-        static let redirectURL = "follow://follow-network.org"
+        static let clientID = UserDefaults.standard.string(forKey: "clientId") ?? ""
+        static let clientSecret = UserDefaults.standard.string(forKey: "clientSecret") ?? ""
+        static var wallet = WalletManager.currentWallet
         
-        struct FollowSecrets {
-            
-            static let clientID = FollowSecrets.environmentVariable(named: "FOLLOW_CLIENT_ID") ?? ""
-            static let clientSecret = FollowSecrets.environmentVariable(named: "FOLLOW_CLIENT_SECRET") ?? ""
-            
-            private static func environmentVariable(named: String) -> String? {
-                guard let infoDictionary = Bundle.main.infoDictionary, let value = infoDictionary[named] as? String else {
-                    print("‼️ Missing Environment Variable: '\(named)'")
-                    return nil
-                }
-                return value
-            }
-        }
+//        struct FollowSecrets {
+//
+//            static let clientID = FollowSecrets.environmentVariable(named: "FOLLOW_CLIENT_ID") ?? ""
+//            static let clientSecret = FollowSecrets.environmentVariable(named: "FOLLOW_CLIENT_SECRET") ?? ""
+//
+//            private static func environmentVariable(named: String) -> String? {
+//                guard let infoDictionary = Bundle.main.infoDictionary, let value = infoDictionary[named] as? String else {
+//                    print("‼️ Missing Environment Variable: '\(named)'")
+//                    return nil
+//                }
+//                return value
+//            }
+//        }
     }
 }
 

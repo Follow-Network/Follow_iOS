@@ -10,48 +10,82 @@ import Foundation
 import RxSwift
 import TinyNetworking
 
-protocol AuthSessionListener {
-     func didReceiveRedirect(code: String)
-}
-
-fileprivate enum FollowAuthorization: ResourceType {
-
-    case accessToken(withCode: String)
-
+fileprivate enum Auth: ResourceType {
+    case register(
+        pubkey: String,
+        username: String,
+        password: String,
+        signature: String
+    )
+    
+    case authenticate(
+        username: String,
+        password: String
+    )
+    
+    case accessToken(
+        withCreds: UserCreds
+    )
+    
     var baseURL: URL {
-        guard let url = URL(string: "https://follow-network.org") else {
-            fatalError("FAILED: https://follow-network.org")
+        let urlString = Constants.FollowSettings.https +
+            Constants.FollowSettings.apiPrefix +
+            Constants.FollowSettings.host
+        guard let url = URL(string: urlString) else {
+            fatalError("FAILED: \(urlString)")
         }
         return url
     }
-
+    
     var endpoint: Endpoint {
-        return .post(path: "/auth/token")
+        switch self {
+        case .register:
+            return .post(path: "/join")
+        case .authenticate:
+            return .post(path: "/auth/authorize")
+        case .accessToken:
+            return .post(path: "/auth/token")
+        }
     }
-
+    
     var task: Task {
         switch self {
-        case let .accessToken(withCode: code):
+        case let .register(value):
+            
             var params: [String: Any] = [:]
-
+            params["pubkey"] = value.pubkey
+            params["username"] = value.username
+            params["password"] = value.password
+            params["signature"] = value.signature
+            
+            return .requestWithParameters(params, encoding: URLEncoding())
+            
+        case let .authenticate(value):
+            
+            var params: [String: Any] = [:]
+            params["username"] = value.username
+            params["password"] = value.password
+            
+            return .requestWithParameters(params, encoding: URLEncoding())
+            
+        case let .accessToken(value):
+            
+            var params: [String: Any] = [:]
             params["grant_type"] = "authorization_code"
-            params["client_id"] = Constants.FollowSettings.clientID
-            params["client_secret"] = Constants.FollowSettings.clientSecret
-            params["redirect_uri"] = Constants.FollowSettings.redirectURL
-            params["code"] = code
-
+            params["client_id"] = value.clientID
+            params["client_secret"] = value.clientSecret
+            
             return .requestWithParameters(params, encoding: URLEncoding())
         }
     }
-
+    
     var headers: [String : String] {
         return [:]
     }
+    
 }
 
 class AuthManager: AuthServiceType {
-
-    var delegate: AuthSessionListener!
 
     static var shared: AuthManager {
         return AuthManager(
@@ -62,84 +96,92 @@ class AuthManager: AuthServiceType {
     }
 
     // MARK: Private Properties
-    private let clientID: String
-    private let clientSecret: String
-    private let redirectURL: URL
+    private let clientID: String?
+    private let clientSecret: String?
     private let scopes: [Scope]
-    private let service: TinyNetworking<Follow>
+    private static let service: TinyNetworking<Auth> = TinyNetworking<Auth>()
 
     // MARK: Public Properties
     public var accessToken: String? {
-        return UserDefaults.standard.string(forKey: clientID)
+        return clientID != nil ? UserDefaults.standard.string(forKey: clientID!) : nil
     }
 
     public func clearAccessToken() {
-        UserDefaults.standard.removeObject(forKey: clientID)
+        if clientID != nil { UserDefaults.standard.removeObject(forKey: clientID!) }
     }
 
     // MARK: Init
-    init(clientID:     String,
-         clientSecret: String,
-         scopes:       [Scope] = [Scope.pub],
-         service:      TinyNetworking<Follow> = TinyNetworking<Follow>()) {
+    init(clientID:     String? = nil,
+         clientSecret: String? = nil,
+         scopes:       [Scope] = [Scope.pub]) {
         self.clientID     = clientID
         self.clientSecret = clientSecret
-        self.redirectURL  = URL(string: Constants.FollowSettings.redirectURL)!
         self.scopes       = scopes
-        self.service      = service
     }
 
     // MARK: Public
-    public func receivedCodeRedirect(url: URL) {
-        guard let code = extractCode(from: url) else { return }
-        delegate.didReceiveRedirect(code: code)
-    }
     
-    public func register(pubkey: String,
-                         username: String,
-                         password: String,
-                         signature: String) -> Observable<Result<User, ServiceError>> {
-        return service.rx.request(resource: .register(pubkey: pubkey,
-                                                      username: username,
-                                                      password: password,
-                                                      signature: signature)
-            )
-            .map(to: User.self)
-            .map(Result.success)
-            .catchError { error in
-                return .just(.error(.error(withMessage: "Can't register user")))
-            }
-            .asObservable()
-    }
-    
-    public func authenticate(username: String, password: String) -> Observable<Result<User, ServiceError>> {
-        return service.rx.request(resource: .authenticate(username: username,
-                                                          password: password)
-            )
-            .map(to: User.self)
-            .map(Result.success)
-            .catchError { error in
-                return .just(.error(.error(withMessage: "Can't authenticate user")))
-            }
-            .asObservable()
-    }
-
-    public func accessToken(with code: String, completion: @escaping (AccessToken?, ServiceError?) -> Void) {
-        service.request(resource: .accessToken(withCode: code)) { [unowned self] response in
+    public static func register(pubkey: String,
+                                username: String,
+                                password: String,
+                                signature: String,
+                                completion: @escaping (UserCreds?, ServiceError?) -> Void) {
+        service.request(resource: .register(pubkey: pubkey,
+                                            username: username,
+                                            password: password,
+                                            signature: signature)) { response in
             switch response {
             case let .success(result):
-                if let accessTokenObject = try? result.map(to: AccessToken.self) {
-                    let token = accessTokenObject.accessToken
-                    UserDefaults.standard.set(token, forKey: self.clientID)
-                    completion(accessTokenObject, nil)
+                if let userCredsObject = try? result.map(to: UserCreds.self) {
+                    let clientId = userCredsObject.clientID
+                    let clientSecret = userCredsObject.clientSecret
+                    UserDefaults.standard.set(clientId, forKey: "clientId")
+                    UserDefaults.standard.set(clientSecret, forKey: "clientSecret")
+                    completion(userCredsObject, nil)
                 }
             case let .error(error):
-                completion(nil, .error(withMessage: "Access token error: \(error)"))
+                completion(nil, .error(withMessage: "Register error: \(error)"))
+            }
+        }
+    }
+    
+    public static func authenticate(username: String,
+                                    password: String,
+                                    completion: @escaping (UserCreds?, ServiceError?) -> Void) {
+        service.request(resource: .authenticate(username: username,
+                                                password: password)) { response in
+            switch response {
+            case let .success(result):
+                if let userCredsObject = try? result.map(to: UserCreds.self) {
+                    let clientId = userCredsObject.clientID
+                    let clientSecret = userCredsObject.clientSecret
+                    UserDefaults.standard.set(clientId, forKey: "clientId")
+                    UserDefaults.standard.set(clientSecret, forKey: "clientSecret")
+                    completion(userCredsObject, nil)
+                }
+            case let .error(error):
+                completion(nil, .error(withMessage: "Auth error: \(error)"))
             }
         }
     }
 
-    private func extractCode(from url: URL) -> String? {
-       return url.value(for: "code")
+    public func accessToken(with creds: UserCreds,
+                            completion: @escaping (AccessToken?, ServiceError?) -> Void) {
+        if let clientID = clientID {
+            AuthManager.service.request(resource: .accessToken(withCreds: creds)) { response in
+                switch response {
+                case let .success(result):
+                    if let accessTokenObject = try? result.map(to: AccessToken.self) {
+                        let token = accessTokenObject.accessToken
+                        UserDefaults.standard.set(token, forKey: clientID)
+                        completion(accessTokenObject, nil)
+                    }
+                case let .error(error):
+                    completion(nil, .error(withMessage: "Access token error: \(error)"))
+                }
+            }
+        } else {
+            completion(nil, .error(withMessage: "Cant find client ID"))
+        }
     }
 }
