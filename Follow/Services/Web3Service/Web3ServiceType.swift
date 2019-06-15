@@ -8,10 +8,13 @@
 
 import Foundation
 import RxSwift
+import web3swift
 
 protocol Web3ServiceType {
     func setCurrentWallet(_ wallet: Wallet)
     func removeCurrentWallet()
-    func sendRawTx(hash: String) -> Observable<Result<JSONResponse, ServiceError>>
+    func sendTx(password: String,
+                toAddress: EthereumAddress,
+                value: Float) -> Observable<Result<JSONResponse, ServiceError>>
     func getEthBalance(address: String) -> Observable<Result<JSONResponse, ServiceError>>
 }

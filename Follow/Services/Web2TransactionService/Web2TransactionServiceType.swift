@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-protocol TransactionServiceType {
+protocol Web2TransactionServiceType {
     
     func deposit(transaction: Transaction) -> Observable<Result<Transaction, ServiceError>>
     func withdraw(transaction: Transaction) -> Observable<Result<Transaction, ServiceError>>

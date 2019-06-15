@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import TinyNetworking
 
-struct TransactionService: TransactionServiceType {
+struct Web2TransactionService: Web2TransactionServiceType {
     
     private let service: TinyNetworking<Follow>
     

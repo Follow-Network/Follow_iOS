@@ -10,7 +10,7 @@ import Foundation
 import web3swift
 
 class WalletService {
-    public func getKeystoreManager(wallet: Wallet) throws -> KeystoreManager {
+    public static func getKeystoreManager(wallet: Wallet) throws -> KeystoreManager {
         if wallet.isHD {
             guard let keystore = BIP32Keystore(wallet.data) else {
                 guard let defaultManager = KeystoreManager.defaultManager else {
@@ -30,7 +30,7 @@ class WalletService {
         }
     }
     
-    public func getPrivateKey(wallet: Wallet, password: String) throws -> String {
+    public static func getPrivateKey(wallet: Wallet, password: String) throws -> String {
         do {
             let ethereumAddress = wallet.address
             let manager = try getKeystoreManager(wallet: wallet)

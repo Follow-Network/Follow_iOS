@@ -90,7 +90,22 @@ class Web3Manager: Web3ServiceType {
         Constants.FollowSettings.wallet = nil
     }
     
-    public func sendRawTx(hash: String) -> Observable<Result<JSONResponse, ServiceError>> {
+    public func sendTx(password: String,
+                       toAddress: EthereumAddress,
+                       value: Float = 0.0) -> Observable<Result<JSONResponse, ServiceError>> {
+        guard let wallet = wallet else {
+            return .just(.error(.error(withMessage: "Storage error")))
+        }
+        do {
+            let tx = try Web3TransactionService.prepareSendEthTransaction(password: password, wallet: wallet, toAddress: toAddress, value: value)
+            let hash = try Web3TransactionService.getTransactionHash(tx)
+            return sendRawTx(hash: hash)
+        } catch let error {
+            return .just(.error(.error(withMessage: "\(error)")))
+        }
+    }
+    
+    private func sendRawTx(hash: String) -> Observable<Result<JSONResponse, ServiceError>> {
         return service.rx.request(resource: .sendRawTx(withHash: hash)
             )
             .map(to: JSONResponse.self)

@@ -8,7 +8,8 @@
 
 import Foundation
 
-enum ServiceError {
+enum ServiceError: Error {
+    case wrongSignedTx
     case noAccessToken
     case error(withMessage: String)
 }
